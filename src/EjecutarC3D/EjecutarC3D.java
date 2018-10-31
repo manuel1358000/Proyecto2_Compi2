@@ -45,8 +45,17 @@ public class EjecutarC3D {
                 }else if(nodo.getHijos().size()==2){
                     resultado=Hacer(nodo.getHijos().get(0));
                     resultado=Hacer(nodo.getHijos().get(1));
-                }else{
+                }else if(nodo.getHijos().size()==3){
                 }
+                break;
+            }
+            case "get_local":{
+                //se realiza la operacion de get_local
+                break;
+            }
+            case "tipo":{
+                resultado.tipo=nodo.getValor();
+                resultado.valor=nodo.getValor();
                 break;
             }
             case "add":{
