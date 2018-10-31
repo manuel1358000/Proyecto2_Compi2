@@ -1,0 +1,138 @@
+package Gramatica_DASM;
+import java_cup.runtime.Symbol;
+import java_cup.runtime.*;
+import java.lang.*;
+import javax.swing.JOptionPane;
+import java.io.*;
+import Estructuras.Nodo;
+import Estructuras.Errores;
+import java.util.LinkedList;
+parser code
+{:
+    public LinkedList<Errores>lista_errores=new LinkedList<Errores>();
+    public static Nodo inicio=new Nodo("INICIO","",0,0,0);
+    public void syntax_error(Symbol s){
+        System.out.println("Error en la linea "+(s.right+1)+" Columna "+s.left+". Identificador "+s.value+" no reconocido"); 
+    }
+    /**Metodo al que se llama en el momento en que ya no es posible una recuperacion de errores.*/
+    public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception{
+        javax.swing.JOptionPane.showMessageDialog(null,"Error Sintactico en la linea "+(s.right+1)+"Columna "+s.left+". Identificador"+s.value+" no reconocido.");
+    }
+:}
+action code
+{:  
+    public static int index=1;
+    public Nodo crear_Nodo(String nombre, String valor, int linea, int columna){
+    Nodo nuevo=new Nodo(nombre,valor,linea,columna,index);
+    index++;
+    return nuevo;
+    }
+:}
+terminal String numero_completo,dolar,palabra,principal;
+terminal String add,diff,mult,div,mod,lt,gt,lte,gte,eqz,and,or,not,br,br_if,get_local,get_global,set_local,set_global,tee_local,tee_global,function,end,print,call,i_caracter,i_entero,i_flotante,calc,retorno,quadrate,oval,texto,point,line;
+non terminal Nodo INICIAL;
+non terminal Nodo ASIGNACION,CONTENIDO_FUNCTION,VALOR_OPERACION,TIPO_OPERACION,TIPO_OPERACION2,TIPO,NOMBRE_FUNCTION;
+start with INICIAL;
+INICIAL::= ASIGNACION:a{:
+                            Nodo inicio=crear_Nodo("inicio","",0,0);
+                            inicio.getHijos().add(a);
+                            sintactico_DASM.inicio=inicio;
+                        :};
+ASIGNACION::=ASIGNACION:a function:b NOMBRE_FUNCTION:c CONTENIDO_FUNCTION:d end{:
+                                                                                
+                                                                                Nodo temp=crear_Nodo("asignacion","-",0,0);
+                                                                                Nodo funcion=crear_Nodo("funcion",c.getValor(),bright,bleft);
+                                                                                funcion.getHijos().add(d);
+                                                                                temp.getHijos().add(a);
+                                                                                temp.getHijos().add(funcion);
+                                                                                RESULT=temp;
+                                                                               :}
+             | function:a NOMBRE_FUNCTION:b CONTENIDO_FUNCTION:c end{:
+                                                                    Nodo temp=crear_Nodo("asignacion","-",0,0);
+                                                                    Nodo funcion=crear_Nodo("funcion",b.getValor(),aright,aleft);
+                                                                    funcion.getHijos().add(c);
+                                                                    temp.getHijos().add(funcion);
+                                                                    RESULT=temp;
+                                                                 :};
+NOMBRE_FUNCTION::= dolar:a palabra:b{:
+                                        RESULT=crear_Nodo(a+b,a+b,0,0);
+                                    :}
+                 | palabra:a{:
+                                RESULT=crear_Nodo(a,a,0,0);;
+                            :}
+                 | principal:a{:
+                                RESULT=crear_Nodo("principal",a,0,0);;
+                              :};
+CONTENIDO_FUNCTION::= CONTENIDO_FUNCTION:a TIPO_OPERACION:b VALOR_OPERACION:c{:
+                                                                                Nodo temp=crear_Nodo("operacion","operacion",0,0);
+                                                                                temp.getHijos().add(a);
+                                                                                temp.getHijos().add(b);
+                                                                                temp.getHijos().add(c);
+                                                                                RESULT=temp;
+                                                                             :}
+                     | CONTENIDO_FUNCTION:a TIPO_OPERACION2:b{:
+                                                                Nodo temp=crear_Nodo("operacion","operacion",0,0);
+                                                                temp.getHijos().add(a);
+                                                                temp.getHijos().add(b);
+                                                                RESULT=temp;
+                                                             :} 
+                     | CONTENIDO_FUNCTION:a numero_completo:b{:
+                                                                Nodo temp=crear_Nodo("operacion","operacion",0,0);
+                                                                Nodo nodo=crear_Nodo("numero",b,bright,bleft);
+                                                                temp.getHijos().add(a);
+                                                                temp.getHijos().add(nodo);
+                                                                RESULT=temp;
+                                                             :}
+                     | TIPO_OPERACION:a VALOR_OPERACION:b{:
+                                                            Nodo temp=crear_Nodo("operacion","operacion",0,0);
+                                                            temp.getHijos().add(a);
+                                                            temp.getHijos().add(b);
+                                                            RESULT=temp;
+                                                         :}
+                     | TIPO_OPERACION2:a{:
+                                            Nodo temp=crear_Nodo("operacion","operacion",0,0);
+                                            temp.getHijos().add(a);
+                                            RESULT=temp;
+                                        :} 
+                     | numero_completo:a{:
+                                            Nodo temp=crear_Nodo("operacion","operacion",0,0);
+                                            Nodo nodo=crear_Nodo("numero",a,aright,aleft);
+                                            temp.getHijos().add(nodo);
+                                            RESULT=temp;                                            
+                                        :};
+VALOR_OPERACION::= dolar TIPO:a{:RESULT=a;:}
+                 | numero_completo:a{:RESULT=crear_Nodo("numero",a,aright,aleft);:};
+TIPO::= calc:a{:RESULT=crear_Nodo("calc",a,aright,aleft);:}
+      | retorno:a{:RESULT=crear_Nodo("retorno",a,aright,aleft);:}
+      | quadrate:a{:RESULT=crear_Nodo("quadrate",a,aright,aleft);:}
+      | oval:a{:RESULT=crear_Nodo("oval",a,aright,aleft);:}
+      | texto:a{:RESULT=crear_Nodo("texto",a,aright,aleft);:}
+      | point:a{:RESULT=crear_Nodo("point",a,aright,aleft);:}
+      | line:a{:RESULT=crear_Nodo("line",a,aright,aleft);:}
+      | palabra:a{:RESULT=crear_Nodo("v_m",a,aright,aleft);:};
+TIPO_OPERACION::= get_local:a{:RESULT=crear_Nodo("get_local",a,aright,aleft);:}
+                | set_local:a{:RESULT=crear_Nodo("set_local",a,aright,aleft);:}
+                | get_global:a{:RESULT=crear_Nodo("get_global",a,aright,aleft);:}
+                | set_global:a{:RESULT=crear_Nodo("set_global",a,aright,aleft);:}
+                | tee_local:a{:RESULT=crear_Nodo("tee_local",a,aright,aleft);:}
+                | tee_global:a{:RESULT=crear_Nodo("tee_global",a,aright,aleft);:}
+                | call:a{:RESULT=crear_Nodo("call",a,aright,aleft);:}
+                | br_if:a{:RESULT=crear_Nodo("br_if",a,aright,aleft);:}
+                | br:a{:RESULT=crear_Nodo("br",a,aright,aleft);:};
+TIPO_OPERACION2::= add:a{:RESULT=crear_Nodo("add",a,aright,aleft);:}
+                 | diff:a{:RESULT=crear_Nodo("diff",a,aright,aleft);:}
+                 | mult:a{:RESULT=crear_Nodo("mult",a,aright,aleft);:}
+                 | div:a{:RESULT=crear_Nodo("div",a,aright,aleft);:}
+                 | mod:a{:RESULT=crear_Nodo("mod",a,aright,aleft);:}
+                 | lt:a{:RESULT=crear_Nodo("lt",a,aright,aleft);:}
+                 | gt:a{:RESULT=crear_Nodo("gt",a,aright,aleft);:}
+                 | lte:a{:RESULT=crear_Nodo("lte",a,aright,aleft);:}
+                 | gte:a{:RESULT=crear_Nodo("gte",a,aright,aleft);:}
+                 | eqz:a{:RESULT=crear_Nodo("eqz",a,aright,aleft);:}
+                 | and:a{:RESULT=crear_Nodo("and",a,aright,aleft);:}
+                 | or:a{:RESULT=crear_Nodo("or",a,aright,aleft);:}
+                 | not:a{:RESULT=crear_Nodo("not",a,aright,aleft);:}
+                 | i_caracter:a{:RESULT=crear_Nodo("i_caracter",a,aright,aleft);:}
+                 | i_entero:a{:RESULT=crear_Nodo("i_entero",a,aright,aleft);:}
+                 | i_flotante:a{:RESULT=crear_Nodo("i_flotante",a,aright,aleft);:}
+                 | print:a{:RESULT=crear_Nodo("print",a,aright,aleft);:};
