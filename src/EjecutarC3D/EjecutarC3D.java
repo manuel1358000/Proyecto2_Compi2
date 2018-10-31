@@ -50,7 +50,75 @@ public class EjecutarC3D {
                 break;
             }
             case "get_local":{
-                //se realiza la operacion de get_local
+                //busco el valor de la variable que tiene
+                if(nodo.getHijos().get(0).getNombre().equals("numero")){
+                    System.out.println("Solo tengo que mover el valor---------------------------->>>>>>>>>>>>>>>>>>>>>>");
+                }else{
+                    System.out.println("Tengo que ir a buscar el valor de la variable que venga o si es un tipo de funcion en especifico");
+                }
+                break;
+            }
+            case "get_global":{
+                //busco el valor de la variable que tiene
+                if(nodo.getHijos().get(0).getNombre().equals("numero")){
+                    System.out.println("Solo tengo que mover el valor---------------------------->>>>>>>>>>>>>>>>>>>>>>");
+                }else{
+                    System.out.println("Tengo que ir a buscar el valor de la variable que venga o si es un tipo de funcion en especifico");
+                }
+                break;
+            }
+            case "set_local":{
+                //busco el valor de la variable que tiene
+                if(nodo.getHijos().get(0).getNombre().equals("numero")){
+                    System.out.println("Solo tengo que mover el valor---------------------------->>>>>>>>>>>>>>>>>>>>>>");
+                }else{
+                    System.out.println("Tengo que ir a buscar el valor de la variable que venga o si es un tipo de funcion en especifico");
+                }
+                break;
+            }
+            case "set_global":{
+                //busco el valor de la variable que tiene
+                if(nodo.getHijos().get(0).getNombre().equals("numero")){
+                    System.out.println("Solo tengo que mover el valor---------------------------->>>>>>>>>>>>>>>>>>>>>>");
+                }else{
+                    System.out.println("Tengo que ir a buscar el valor de la variable que venga o si es un tipo de funcion en especifico");
+                }
+                break;
+            }
+            case "tee_local":{
+                //busco el valor de la variable que tiene
+                if(nodo.getHijos().get(0).getNombre().equals("numero")){
+                    System.out.println("Solo tengo que mover el valor---------------------------->>>>>>>>>>>>>>>>>>>>>>");
+                }else{
+                    System.out.println("Tengo que ir a buscar el valor de la variable que venga o si es un tipo de funcion en especifico");
+                }
+                break;
+            }
+            case "tee_global":{
+                //busco el valor de la variable que tiene
+                if(nodo.getHijos().get(0).getNombre().equals("numero")){
+                    System.out.println("Solo tengo que mover el valor---------------------------->>>>>>>>>>>>>>>>>>>>>>");
+                }else{
+                    System.out.println("Tengo que ir a buscar el valor de la variable que venga o si es un tipo de funcion en especifico");
+                }
+                break;
+            }
+            case "br_if":{
+                //busco el valor de la variable que tiene
+                if(nodo.getHijos().get(0).getNombre().equals("v_m")){
+                    System.out.println("Solo tengo que buscar la etiqueta---------------------------->>>>>>>>>>>>>>>>>>>>>>");
+                }else{
+                    System.out.println("Tengo que ir a buscar el valor de la variable que venga o si es un tipo de funcion en especifico");
+                }
+                break;
+            }
+            case "br":{
+                //En esta parte solo pueden venir etiquetas
+                if(nodo.getHijos().get(0).getNombre().equals("v_m")){
+                    System.out.println("Solo tengo que buscar la etiqueta---------------------------->>>>>>>>>>>>>>>>>>>>>>");
+                }else{
+                    System.out.println("Tengo que ir a buscar el valor de la variable que venga o si es un tipo de funcion en especifico");
+                }
                 break;
             }
             case "tipo":{
