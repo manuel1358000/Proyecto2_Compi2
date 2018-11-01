@@ -8,13 +8,26 @@ package EjecutarC3D;
 import Estructuras.Nodo;
 import Gramatica_DASM.sintactico_DASM;
 import proyecto2_compi2.Principal;
+import static proyecto2_compi2.Principal.pila;
 
 /**
  *
  * @author anton
  */
 public class EjecutarC3D {
-    public int calc=0;
+    public double calc=0.0;
+    public EjecutarC3D(){
+        iniciarPila();
+    }
+    public static void iniciarPila(){
+        
+        for(int i=1;i<10000;i++){
+            pila.push(0.0);
+            Principal.heap.push(0.0);
+        }
+        Principal.heap.pushReferencia(0,1.0);
+        pila.pushReferencia(0,1.0);
+    }
     public Resultado Hacer(Nodo nodo) {
         return Accion(nodo);
     }
@@ -52,54 +65,75 @@ public class EjecutarC3D {
             case "get_local":{
                 //busco el valor de la variable que tiene
                 if(nodo.getHijos().get(0).getNombre().equals("numero")){
-                    System.out.println("Solo tengo que mover el valor---------------------------->>>>>>>>>>>>>>>>>>>>>>");
+                    double valor=Double.parseDouble(Principal.pila.get(Integer.parseInt(nodo.getHijos().get(0).getValor())).toString());
+                    Principal.pila_auxiliar.push(valor);
                 }else{
-                    System.out.println("Tengo que ir a buscar el valor de la variable que venga o si es un tipo de funcion en especifico");
+                    
                 }
                 break;
             }
             case "get_global":{
                 //busco el valor de la variable que tiene
+                //busco el valor de la variable que tiene
                 if(nodo.getHijos().get(0).getNombre().equals("numero")){
-                    System.out.println("Solo tengo que mover el valor---------------------------->>>>>>>>>>>>>>>>>>>>>>");
+                    double valor=Double.parseDouble(Principal.heap.get(Integer.parseInt(nodo.getHijos().get(0).getValor())).toString());
+                    Principal.pila_auxiliar.push(valor);
                 }else{
-                    System.out.println("Tengo que ir a buscar el valor de la variable que venga o si es un tipo de funcion en especifico");
+                    
                 }
                 break;
             }
             case "set_local":{
                 //busco el valor de la variable que tiene
                 if(nodo.getHijos().get(0).getNombre().equals("numero")){
-                    System.out.println("Solo tengo que mover el valor---------------------------->>>>>>>>>>>>>>>>>>>>>>");
-                }else{
-                    System.out.println("Tengo que ir a buscar el valor de la variable que venga o si es un tipo de funcion en especifico");
+                    int posicion=Integer.parseInt(nodo.getHijos().get(0).getValor());
+                    double valor=Double.parseDouble(Principal.pila_auxiliar.pop().toString());
+                    Principal.pila.pushReferencia(posicion, valor);
+                }else if(nodo.getHijos().get(0).getNombre().equals("calc")){
+                    this.calc=Double.parseDouble(Principal.pila_auxiliar.pop().toString());
+                    double posicion=Double.parseDouble(Principal.pila_auxiliar.pop().toString());
+                    int posicion1=(int)posicion;
+                    Principal.pila.pushReferencia(posicion1,this.calc);
                 }
                 break;
             }
             case "set_global":{
                 //busco el valor de la variable que tiene
                 if(nodo.getHijos().get(0).getNombre().equals("numero")){
-                    System.out.println("Solo tengo que mover el valor---------------------------->>>>>>>>>>>>>>>>>>>>>>");
-                }else{
-                    System.out.println("Tengo que ir a buscar el valor de la variable que venga o si es un tipo de funcion en especifico");
+                    int posicion=Integer.parseInt(nodo.getHijos().get(0).getValor());
+                    double valor=Double.parseDouble(Principal.pila_auxiliar.pop().toString());
+                    Principal.heap.pushReferencia(posicion, valor);
+                }else if(nodo.getHijos().get(0).getNombre().equals("calc")){
+                    this.calc=Double.parseDouble(Principal.pila_auxiliar.pop().toString());
+                    double posicion=Double.parseDouble(Principal.pila_auxiliar.pop().toString());
+                    int posicion1=(int)posicion;
+                    Principal.heap.pushReferencia(posicion1,this.calc);
                 }
                 break;
             }
             case "tee_local":{
-                //busco el valor de la variable que tiene
                 if(nodo.getHijos().get(0).getNombre().equals("numero")){
-                    System.out.println("Solo tengo que mover el valor---------------------------->>>>>>>>>>>>>>>>>>>>>>");
-                }else{
-                    System.out.println("Tengo que ir a buscar el valor de la variable que venga o si es un tipo de funcion en especifico");
+                    int posicion=Integer.parseInt(nodo.getHijos().get(0).getValor());
+                    double valor=Double.parseDouble(Principal.pila_auxiliar.getLast().toString());
+                    Principal.pila.pushReferencia(posicion, valor);
+                }else if(nodo.getHijos().get(0).getNombre().equals("calc")){
+                    this.calc=Double.parseDouble(Principal.pila_auxiliar.pop().toString());
+                    double posicion=Double.parseDouble(Principal.pila_auxiliar.getLast().toString());
+                    int posicion1=(int)posicion;
+                    Principal.pila.pushReferencia(posicion1,this.calc);
                 }
                 break;
             }
             case "tee_global":{
-                //busco el valor de la variable que tiene
                 if(nodo.getHijos().get(0).getNombre().equals("numero")){
-                    System.out.println("Solo tengo que mover el valor---------------------------->>>>>>>>>>>>>>>>>>>>>>");
-                }else{
-                    System.out.println("Tengo que ir a buscar el valor de la variable que venga o si es un tipo de funcion en especifico");
+                    int posicion=Integer.parseInt(nodo.getHijos().get(0).getValor());
+                    double valor=Double.parseDouble(Principal.pila_auxiliar.getLast().toString());
+                    Principal.heap.pushReferencia(posicion, valor);
+                }else if(nodo.getHijos().get(0).getNombre().equals("calc")){
+                    this.calc=Double.parseDouble(Principal.pila_auxiliar.pop().toString());
+                    double posicion=Double.parseDouble(Principal.pila_auxiliar.getLast().toString());
+                    int posicion1=(int)posicion;
+                    Principal.heap.pushReferencia(posicion1,this.calc);
                 }
                 break;
             }
@@ -108,16 +142,18 @@ public class EjecutarC3D {
                 if(nodo.getHijos().get(0).getNombre().equals("v_m")){
                     System.out.println("Solo tengo que buscar la etiqueta---------------------------->>>>>>>>>>>>>>>>>>>>>>");
                 }else{
-                    System.out.println("Tengo que ir a buscar el valor de la variable que venga o si es un tipo de funcion en especifico");
+                    
                 }
                 break;
             }
             case "br":{
                 //En esta parte solo pueden venir etiquetas
                 if(nodo.getHijos().get(0).getNombre().equals("v_m")){
-                    System.out.println("Solo tengo que buscar la etiqueta---------------------------->>>>>>>>>>>>>>>>>>>>>>");
+                    Nodo salto=sintactico_DASM.inicio;
+                    Nodo respuesta=busqueda(nodo.getHijos().get(0).getValor(),salto);
+                    System.out.println("asdasdasd");
                 }else{
-                    System.out.println("Tengo que ir a buscar el valor de la variable que venga o si es un tipo de funcion en especifico");
+                    
                 }
                 break;
             }
@@ -139,7 +175,7 @@ public class EjecutarC3D {
                 if(Principal.pila_auxiliar.size()>=2){
                     double valor1=Double.parseDouble(Principal.pila_auxiliar.pop().toString());
                     double valor2=Double.parseDouble(Principal.pila_auxiliar.pop().toString());
-                    double respuesta=valor1-valor2;
+                    double respuesta=valor2-valor1;
                     Principal.pila_auxiliar.push(respuesta);
                 }
                 break;
@@ -157,7 +193,7 @@ public class EjecutarC3D {
                 if(Principal.pila_auxiliar.size()>=2){
                     double valor1=Double.parseDouble(Principal.pila_auxiliar.pop().toString());
                     double valor2=Double.parseDouble(Principal.pila_auxiliar.pop().toString());
-                    double respuesta=valor1/valor2;
+                    double respuesta=valor2/valor1;
                     Principal.pila_auxiliar.push(respuesta);
                 }
                 break;
@@ -166,7 +202,7 @@ public class EjecutarC3D {
                 if(Principal.pila_auxiliar.size()>=2){
                     double valor1=Double.parseDouble(Principal.pila_auxiliar.pop().toString());
                     double valor2=Double.parseDouble(Principal.pila_auxiliar.pop().toString());
-                    double respuesta=valor1%valor2;
+                    double respuesta=valor2%valor1;
                     Principal.pila_auxiliar.push(respuesta);
                 }
                 break;
@@ -291,6 +327,11 @@ public class EjecutarC3D {
                 Principal.pila_auxiliar.push(Double.parseDouble(nodo.getValor()));
                 break;
             }
+            case "decimal":{
+                //agregar el numero decimal a la pila auxiliar
+                Principal.pila_auxiliar.push(Double.parseDouble(nodo.getValor()));
+                break;
+            }
             default:{
                 System.out.println("Elemento por default");
                 break;
@@ -310,6 +351,10 @@ public class EjecutarC3D {
         }else{
             for(int i=0;i<inicio.getHijos().size();i++){
                 respuesta=busqueda(nombre,inicio.getHijos().get(i));
+                if(respuesta==null){
+                }else{
+                    break;
+                }
             }
         }   
         return respuesta;
