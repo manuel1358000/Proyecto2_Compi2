@@ -28,7 +28,7 @@ action code
     return nuevo;
     }
 :}
-terminal String numero_completo,dolar,palabra,principal;
+terminal String numero_completo,dolar,palabra,principal,numero_decimal;
 terminal String add,diff,mult,div,mod,lt,gt,lte,gte,eqz,and,or,not,br,br_if,get_local,get_global,set_local,set_global,tee_local,tee_global,function,end,print,call,i_caracter,i_entero,i_flotante,calc,retorno,quadrate,oval,texto,point,line;
 non terminal Nodo INICIAL;
 non terminal Nodo ASIGNACION,CONTENIDO_FUNCTION,VALOR_OPERACION,TIPO_OPERACION,TIPO_OPERACION2,TIPO,NOMBRE_FUNCTION;
@@ -66,8 +66,9 @@ NOMBRE_FUNCTION::= dolar:a palabra:b{:
 CONTENIDO_FUNCTION::= CONTENIDO_FUNCTION:a TIPO_OPERACION:b VALOR_OPERACION:c{:
                                                                                 Nodo temp=crear_Nodo("operacion","operacion",0,0);
                                                                                 temp.getHijos().add(a);
-                                                                                temp.getHijos().add(b);
-                                                                                temp.getHijos().add(c);
+                                                                                Nodo tipo_operacion=crear_Nodo(b.getNombre(),b.getValor(),0,0);
+                                                                                tipo_operacion.getHijos().add(c);
+                                                                                temp.getHijos().add(tipo_operacion);
                                                                                 RESULT=temp;
                                                                              :}
                      | CONTENIDO_FUNCTION:a TIPO_OPERACION2:b{:
@@ -83,10 +84,25 @@ CONTENIDO_FUNCTION::= CONTENIDO_FUNCTION:a TIPO_OPERACION:b VALOR_OPERACION:c{:
                                                                 temp.getHijos().add(nodo);
                                                                 RESULT=temp;
                                                              :}
+                     | CONTENIDO_FUNCTION:a numero_decimal:b{:
+                                                                Nodo temp=crear_Nodo("operacion","operacion",0,0);
+                                                                Nodo nodo=crear_Nodo("decimal",b,bright,bleft);
+                                                                temp.getHijos().add(a);
+                                                                temp.getHijos().add(nodo);
+                                                                RESULT=temp;
+                                                             :}
+                     | CONTENIDO_FUNCTION:a dolar palabra:b{:
+                                                                Nodo temp=crear_Nodo("operacion","operacion",0,0);
+                                                                Nodo nodo=crear_Nodo("v_m",b,bright,bleft);
+                                                                temp.getHijos().add(a);
+                                                                temp.getHijos().add(nodo);
+                                                                RESULT=temp;
+                                                             :}
                      | TIPO_OPERACION:a VALOR_OPERACION:b{:
                                                             Nodo temp=crear_Nodo("operacion","operacion",0,0);
-                                                            temp.getHijos().add(a);
-                                                            temp.getHijos().add(b);
+                                                            Nodo tipo_operacion=crear_Nodo(a.getNombre(),a.getValor(),0,0);
+                                                            tipo_operacion.getHijos().add(b);
+                                                            temp.getHijos().add(tipo_operacion);
                                                             RESULT=temp;
                                                          :}
                      | TIPO_OPERACION2:a{:
@@ -97,6 +113,18 @@ CONTENIDO_FUNCTION::= CONTENIDO_FUNCTION:a TIPO_OPERACION:b VALOR_OPERACION:c{:
                      | numero_completo:a{:
                                             Nodo temp=crear_Nodo("operacion","operacion",0,0);
                                             Nodo nodo=crear_Nodo("numero",a,aright,aleft);
+                                            temp.getHijos().add(nodo);
+                                            RESULT=temp;                                            
+                                        :}
+                     | numero_decimal:a{:
+                                            Nodo temp=crear_Nodo("operacion","operacion",0,0);
+                                            Nodo nodo=crear_Nodo("decimal",a,aright,aleft);
+                                            temp.getHijos().add(nodo);
+                                            RESULT=temp;                                            
+                                        :}
+                     | dolar palabra:a{:
+                                            Nodo temp=crear_Nodo("operacion","operacion",0,0);
+                                            Nodo nodo=crear_Nodo("v_m",a,aright,aleft);
                                             temp.getHijos().add(nodo);
                                             RESULT=temp;                                            
                                         :};
