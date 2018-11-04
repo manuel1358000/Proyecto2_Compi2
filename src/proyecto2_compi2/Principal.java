@@ -46,6 +46,7 @@ import org.fife.ui.rsyntaxtextarea.SyntaxScheme;
 import org.fife.ui.rsyntaxtextarea.Token;
 import org.fife.ui.rsyntaxtextarea.TokenMakerFactory;
 import org.fife.ui.rtextarea.RTextScrollPane;
+import pintar.Pintar;
 import static proyecto2_compi2.Pesta.textArea;
 /**
  *
@@ -61,6 +62,7 @@ public class Principal extends javax.swing.JFrame {
     public static Stack_Generico pila_auxiliar=new Stack_Generico();
     public static Stack_Generico heap=new Stack_Generico();
     RSyntaxTextArea textArea;
+    Pintar pintar=new Pintar();
     /**
      * Creates new form Principal
      */
@@ -70,12 +72,12 @@ public class Principal extends javax.swing.JFrame {
         iniciarTree();
         agregarPesta();
     }
+    
     public static void iniciarTree(){
         jTreeFiles.setJTree(arbol);
         jTreeFiles.init(); 
     }
     public void agregarPesta(){
-        
         RTextScrollPane sp;
         System.out.println(this.jTabbedPane2.getSelectedIndex());
         JPanel panel= new JPanel();
@@ -149,6 +151,7 @@ public class Principal extends javax.swing.JFrame {
         jMenuItem6 = new javax.swing.JMenuItem();
         jMenuItem7 = new javax.swing.JMenuItem();
         jMenuItem8 = new javax.swing.JMenuItem();
+        jMenuItem10 = new javax.swing.JMenuItem();
         jMenuItem9 = new javax.swing.JMenuItem();
 
         jMenu3.setText("jMenu3");
@@ -314,6 +317,14 @@ public class Principal extends javax.swing.JFrame {
             }
         });
         jMenu2.add(jMenuItem8);
+
+        jMenuItem10.setText("Mostrar Pintura");
+        jMenuItem10.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem10ActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuItem10);
 
         jMenuItem9.setText("Mostrar Pilas");
         jMenuItem9.addActionListener(new java.awt.event.ActionListener() {
@@ -545,6 +556,7 @@ public class Principal extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
+        Principal.pila.push(1.0);
         System.out.println("BOTON GENERAR IMAGENES");
         System.out.println(this.jTabbedPane2.getSelectedIndex());
         JPanel panel=(JPanel)this.jTabbedPane2.getComponentAt(0);
@@ -570,6 +582,8 @@ public class Principal extends javax.swing.JFrame {
                     System.out.println("Tamanio Auxiliar "+heap.size());
                 } catch (Exception ex) {
                     Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (Throwable ex) {
+                    Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 //EjecutarCHTML ejecutar=new EjecutarCHTML();
                 //ejecutar.recorrer(sintacticochtml.inicio);
@@ -589,6 +603,16 @@ public class Principal extends javax.swing.JFrame {
         // TODO add your handling code here:
         System.out.println("BOTON INICIAR");
     }//GEN-LAST:event_jMenuItem6ActionPerformed
+
+    private void jMenuItem10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem10ActionPerformed
+        // TODO add your handling code here:
+        
+        pintar.agregarPoint(100,100,"#000000",50);
+        pintar.agregarQuadrate(200, 200,"#FA0000",100,100);
+        pintar.agregarOval(300, 200,"#FF0AA0",100,50);
+        pintar.agregarString(400, 400,"#AAAFFF","HOLA");
+        pintar.agregarLine(100,500,150,200,"#F44000",15);
+    }//GEN-LAST:event_jMenuItem10ActionPerformed
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -629,6 +653,7 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem10;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
