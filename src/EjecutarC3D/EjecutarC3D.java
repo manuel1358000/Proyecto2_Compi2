@@ -15,7 +15,9 @@ import static proyecto2_compi2.Principal.pila;
  * @author anton
  */
 public class EjecutarC3D {
+    public static boolean bandera_etiqueta=true;
     public double calc=0.0;
+    public Nodo auxiliar;
     public EjecutarC3D(){
         iniciarPila();
     }
@@ -28,13 +30,17 @@ public class EjecutarC3D {
         Principal.heap.pushReferencia(0,1.0);
         pila.pushReferencia(0,1.0);
     }
-    public Resultado Hacer(Nodo nodo) {
+    public Resultado Hacer(Nodo nodo) throws Throwable {
         return Accion(nodo);
     }
-    public Resultado Accion(Nodo nodo) {
+    public Resultado Accion(Nodo nodo) throws Throwable {
         Resultado resultado=new Resultado();
         switch(nodo.getNombre().toLowerCase()){
             case "inicio":{
+                resultado=Hacer(nodo.getHijos().get(0));
+                break;
+            }
+            case "asignacion":{
                 resultado=Hacer(nodo.getHijos().get(0));
                 break;
             }
@@ -56,49 +62,58 @@ public class EjecutarC3D {
                     //puede ser numero, add, mult
                     Hacer(nodo.getHijos().get(0));
                 }else if(nodo.getHijos().size()==2){
-                    resultado=Hacer(nodo.getHijos().get(0));
-                    resultado=Hacer(nodo.getHijos().get(1));
+                    resultado=Hacer(nodo.getHijos().get(0));    
+                    if(nodo.getHijos().size()>1){
+                        resultado=Hacer(nodo.getHijos().get(1));
+                        nodo=null;
+                        System.out.println("Valor que tengo que revisar.");
+                    }
                 }else if(nodo.getHijos().size()==3){
                 }
                 break;
             }
             case "get_local":{
                 //busco el valor de la variable que tiene
-                if(nodo.getHijos().get(0).getNombre().equals("numero")){
-                    double valor=Double.parseDouble(Principal.pila.get(Integer.parseInt(nodo.getHijos().get(0).getValor())).toString());
-                    Principal.pila_auxiliar.push(valor);
-                }else{
-                    
+                if(bandera_etiqueta==true){
+                    if(nodo.getHijos().get(0).getNombre().equals("numero")){
+                        double valor=Double.parseDouble(Principal.pila.get(Integer.parseInt(nodo.getHijos().get(0).getValor())).toString());
+                        Principal.pila_auxiliar.push(valor);
+                    }else{
+                    }
                 }
                 break;
             }
             case "get_global":{
                 //busco el valor de la variable que tiene
                 //busco el valor de la variable que tiene
-                if(nodo.getHijos().get(0).getNombre().equals("numero")){
-                    double valor=Double.parseDouble(Principal.heap.get(Integer.parseInt(nodo.getHijos().get(0).getValor())).toString());
-                    Principal.pila_auxiliar.push(valor);
-                }else{
-                    
+                if(bandera_etiqueta==true){
+                    if(nodo.getHijos().get(0).getNombre().equals("numero")){
+                        double valor=Double.parseDouble(Principal.heap.get(Integer.parseInt(nodo.getHijos().get(0).getValor())).toString());
+                        Principal.pila_auxiliar.push(valor);
+                    }else{
+                    }
                 }
                 break;
             }
             case "set_local":{
                 //busco el valor de la variable que tiene
-                if(nodo.getHijos().get(0).getNombre().equals("numero")){
-                    int posicion=Integer.parseInt(nodo.getHijos().get(0).getValor());
-                    double valor=Double.parseDouble(Principal.pila_auxiliar.pop().toString());
-                    Principal.pila.pushReferencia(posicion, valor);
-                }else if(nodo.getHijos().get(0).getNombre().equals("calc")){
-                    this.calc=Double.parseDouble(Principal.pila_auxiliar.pop().toString());
-                    double posicion=Double.parseDouble(Principal.pila_auxiliar.pop().toString());
-                    int posicion1=(int)posicion;
-                    Principal.pila.pushReferencia(posicion1,this.calc);
+                if(bandera_etiqueta==true){
+                    if(nodo.getHijos().get(0).getNombre().equals("numero")){
+                        int posicion=Integer.parseInt(nodo.getHijos().get(0).getValor());
+                        double valor=Double.parseDouble(Principal.pila_auxiliar.pop().toString());
+                        Principal.pila.pushReferencia(posicion, valor);
+                    }else if(nodo.getHijos().get(0).getNombre().equals("calc")){
+                        this.calc=Double.parseDouble(Principal.pila_auxiliar.pop().toString());
+                        double posicion=Double.parseDouble(Principal.pila_auxiliar.pop().toString());
+                        int posicion1=(int)posicion;
+                        Principal.pila.pushReferencia(posicion1,this.calc);
+                    }
                 }
                 break;
             }
             case "set_global":{
                 //busco el valor de la variable que tiene
+                
                 if(nodo.getHijos().get(0).getNombre().equals("numero")){
                     int posicion=Integer.parseInt(nodo.getHijos().get(0).getValor());
                     double valor=Double.parseDouble(Principal.pila_auxiliar.pop().toString());
@@ -148,26 +163,37 @@ public class EjecutarC3D {
             }
             case "br":{
                 //En esta parte solo pueden venir etiquetas
-                if(nodo.getHijos().get(0).getNombre().equals("v_m")){
+                if(nodo.getHijos().get(0).getNombre().equals("etiqueta")){
                     Nodo salto=sintactico_DASM.inicio;
-                    Nodo respuesta=busqueda(nodo.getHijos().get(0).getValor(),salto);
-                    System.out.println("asdasdasd");
+                    System.out.println(nodo.getHijos().get(0).getValor());
+                    Nodo respuesta1=busquedaEtiqueta(nodo.getHijos().get(0).getValor(),sintactico_DASM.inicio);
+                    Hacer(sintactico_DASM.inicio);
+                    bandera_etiqueta=false;
                 }else{
                     
                 }
                 break;
             }
+            case "v_m":{
+                System.out.println("Etiqueta "+nodo.getNombre());
+                System.out.println("----------------------->>>>>>>>>>>>>>>>>>?????????????????????????");
+                bandera_etiqueta=true;
+                break;
+            }
+            
             case "tipo":{
                 resultado.tipo=nodo.getValor();
                 resultado.valor=nodo.getValor();
                 break;
             }
             case "add":{
-                if(Principal.pila_auxiliar.size()>=2){
-                    double valor1=Double.parseDouble(Principal.pila_auxiliar.pop().toString());
-                    double valor2=Double.parseDouble(Principal.pila_auxiliar.pop().toString());
-                    double respuesta=valor1+valor2;
-                    Principal.pila_auxiliar.push(respuesta);
+                if(bandera_etiqueta==true){
+                    if(Principal.pila_auxiliar.size()>=2){
+                        double valor1=Double.parseDouble(Principal.pila_auxiliar.pop().toString());
+                        double valor2=Double.parseDouble(Principal.pila_auxiliar.pop().toString());
+                        double respuesta=valor1+valor2;
+                        Principal.pila_auxiliar.push(respuesta);
+                    }
                 }
                 break;
             }
@@ -324,7 +350,9 @@ public class EjecutarC3D {
             
             case "numero":{
                 //agregar el numero a la pila auxiliar
-                Principal.pila_auxiliar.push(Double.parseDouble(nodo.getValor()));
+                if(bandera_etiqueta==true){
+                    Principal.pila_auxiliar.push(Double.parseDouble(nodo.getValor()));
+                }                
                 break;
             }
             case "decimal":{
@@ -356,6 +384,26 @@ public class EjecutarC3D {
                     break;
                 }
             }
+        }   
+        return respuesta;
+    }
+    public Nodo busquedaEtiqueta(String nombre,Nodo inicio){
+        Nodo respuesta=null;
+        if(inicio.getValor().toLowerCase().equals(nombre.toLowerCase())&&inicio.getNombre().toLowerCase().equals("v_m")){
+            respuesta=inicio;
+            bandera_etiqueta=false;
+        }else{
+            for(int i=0;i<inicio.getHijos().size();i++){
+                respuesta=busquedaEtiqueta(nombre,inicio.getHijos().get(i));
+                if(respuesta!=null){
+                    if(respuesta.getNombre()=="v_m"){
+                        inicio.getHijos().clear();
+                        inicio.getHijos().add(respuesta);
+                        respuesta=inicio;
+                    }
+                }
+            }
+            System.out.println("Inicio "+inicio.getNombre());
         }   
         return respuesta;
     }

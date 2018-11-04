@@ -22,6 +22,7 @@ NUMERO=[0-9]
 LETRA=[a-zA-Z]
 NUMERO_COMPLETO=({NUMERO})+
 PALABRA=({NUMERO}|{LETRA})+
+DECIMAL=({NUMERO})+[.]({NUMERO})+
 %%
 "$"
 {System.out.print(yytext()); return new Symbol(simbolo_DASM.dolar, yyline, yycolumn,yytext());}
@@ -75,7 +76,7 @@ PALABRA=({NUMERO}|{LETRA})+
 {System.out.print(yytext()); return new Symbol(simbolo_DASM.print, yyline, yycolumn,yytext());}
 "call"
 {System.out.print(yytext()); return new Symbol(simbolo_DASM.call, yyline, yycolumn,yytext());}
-"\"%c\""
+"%c"
 {System.out.print(yytext()); return new Symbol(simbolo_DASM.i_caracter, yyline, yycolumn,yytext());}
 "%d"
 {System.out.print(yytext()); return new Symbol(simbolo_DASM.i_entero, yyline, yycolumn,yytext());}
@@ -99,6 +100,8 @@ PALABRA=({NUMERO}|{LETRA})+
 {System.out.print(yytext()); return new Symbol(simbolo_DASM.principal, yyline, yycolumn,yytext());}
 {NUMERO_COMPLETO}
 {System.out.print(yytext()); return new Symbol(simbolo_DASM.numero_completo, yyline, yycolumn,yytext());}
+{DECIMAL}
+{System.out.print(yytext()); return new Symbol(simbolo_DASM.numero_decimal, yyline, yycolumn,yytext());}
 {PALABRA}
 {System.out.print(yytext()); return new Symbol(simbolo_DASM.palabra, yyline, yycolumn,yytext());}
 
