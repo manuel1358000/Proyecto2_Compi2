@@ -163,4 +163,4 @@ TIPO_OPERACION2::= add:a{:RESULT=crear_Nodo("add",a,aright,aleft);:}
                  | i_caracter:a{:RESULT=crear_Nodo("i_caracter",a,aright,aleft);:}
                  | i_entero:a{:RESULT=crear_Nodo("i_entero",a,aright,aleft);:}
                  | i_flotante:a{:RESULT=crear_Nodo("i_flotante",a,aright,aleft);:}
-                 | print:a{:RESULT=crear_Nodo("print",a,aright,aleft);:};
+| print:a{:RESULT=crear_Nodo("print",a,aright,aleft);:};
