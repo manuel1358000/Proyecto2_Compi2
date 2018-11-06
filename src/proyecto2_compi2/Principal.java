@@ -16,10 +16,12 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
@@ -440,9 +442,18 @@ public class Principal extends javax.swing.JFrame {
                 String valor=nodo.getUserObject().toString();
                 String [] separado=valor.split("\\.");
                 if(separado.length==2){
-                    System.out.println("Es un archivo");
+                    //aca tengo que agregar la nueva tab a la interfaz
+                    String rutanueva=new File ("").getAbsolutePath ()+"\\"+nodo.getUserObject().toString();
+                    File archivo=new File(rutanueva);
+                    FileReader fr = new FileReader (archivo);
+                    BufferedReader br = new BufferedReader(fr);
+                    String completo="";
+                    String linea ="";
+                    while((linea=br.readLine())!=null){
+                        completo+="\n"+linea;
+                    }
+                    GenerarPesta(completo,valor,rutanueva);
                 }else{
-                    System.out.println("Es una carpeta");
                 }
             }
         }catch(Exception e){
