@@ -27,6 +27,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.StringReader;
 import static java.lang.System.in;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JButton;
@@ -36,6 +37,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JToolBar;
@@ -56,6 +58,7 @@ import static proyecto2_compi2.Pesta.textArea;
  */
 public class Principal extends javax.swing.JFrame {
 
+    public static ArrayList<JTextArea> listAreas = new ArrayList<JTextArea>();
     public static Pesta nueva;
     public int contador_pesta=0;
     public static JTree arbol;
@@ -72,9 +75,53 @@ public class Principal extends javax.swing.JFrame {
         initComponents();
         arbol=jTree1;
         iniciarTree();
+        agregar_Tabla();
+        agregar_Errores();
+        agregarPesta_Consola();
         agregarPesta();
     }
+    public void agregar_Tabla(){
+        JPanel panel_tabla = new JPanel();
+        panel_tabla.setName("tabla");
+        panel_tabla.setLayout(new BorderLayout());  //give your JPanel a BorderLayout
+        JTextArea text = new JTextArea();
+        text.setName("texto_tabla");
+        listAreas.add(text);
+        JScrollPane scroll = new JScrollPane(text); //place the JTextArea in a scroll pane
+        scroll.setName("scroll_tabla");
+        panel_tabla.add(scroll, BorderLayout.CENTER);
+        this.jTabbedPane2.add(panel_tabla,"TABLA SIMBOLOS",0);
+        this.jTabbedPane2.setSelectedIndex(0);
     
+    }
+    public void agregar_Errores(){
+        JPanel panel_errores = new JPanel();
+        panel_errores.setName("errores");
+        panel_errores.setLayout(new BorderLayout());  //give your JPanel a BorderLayout
+        JTextArea text = new JTextArea();
+        text.setName("texto_errores");
+        listAreas.add(text);
+        JScrollPane scroll = new JScrollPane(text); //place the JTextArea in a scroll pane
+        scroll.setName("scroll_errores");
+        panel_errores.add(scroll, BorderLayout.CENTER);
+        this.jTabbedPane2.add(panel_errores,"ERRORES",0);
+        this.jTabbedPane2.setSelectedIndex(0);
+    
+    }
+    public void agregarPesta_Consola(){
+        JPanel panel = new JPanel();
+        panel.setName("consola");
+        panel.setLayout(new BorderLayout());  //give your JPanel a BorderLayout
+        JTextArea text = new JTextArea();
+        text.setName("texto_consola");
+        listAreas.add(text);
+        JScrollPane scroll = new JScrollPane(text); //place the JTextArea in a scroll pane
+        scroll.setName("scroll_consola");
+        panel.add(scroll, BorderLayout.CENTER);
+        this.jTabbedPane2.add(panel,"CONSOLA",0);
+        this.jTabbedPane2.setSelectedIndex(0);
+    
+    }
     public static void iniciarTree(){
         jTreeFiles.setJTree(arbol);
         jTreeFiles.init(); 
@@ -131,15 +178,6 @@ public class Principal extends javax.swing.JFrame {
         jTree1 = new javax.swing.JTree();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jTabbedPane2 = new javax.swing.JTabbedPane();
-        jPanel3 = new javax.swing.JPanel();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
-        jPanel4 = new javax.swing.JPanel();
-        jScrollPane5 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
-        jPanel1 = new javax.swing.JPanel();
-        jScrollPane6 = new javax.swing.JScrollPane();
-        jTable3 = new javax.swing.JTable();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
@@ -166,75 +204,6 @@ public class Principal extends javax.swing.JFrame {
             }
         });
         jScrollPane1.setViewportView(jTree1);
-
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane2.setViewportView(jTextArea1);
-
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 1198, Short.MAX_VALUE)
-        );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 265, Short.MAX_VALUE)
-        );
-
-        jTabbedPane2.addTab("CONSOLA", jPanel3);
-
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
-        jScrollPane5.setViewportView(jTable2);
-
-        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
-        jPanel4.setLayout(jPanel4Layout);
-        jPanel4Layout.setHorizontalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 1198, Short.MAX_VALUE)
-        );
-        jPanel4Layout.setVerticalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 265, Short.MAX_VALUE)
-        );
-
-        jTabbedPane2.addTab("TABLA DE SIMBOLOS", jPanel4);
-
-        jTable3.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
-        jScrollPane6.setViewportView(jTable3);
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 1198, Short.MAX_VALUE)
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 265, Short.MAX_VALUE)
-        );
-
-        jTabbedPane2.addTab("ERRORES", jPanel1);
 
         jButton1.setText("GENERAR IMAGENES");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -673,18 +642,9 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem7;
     private javax.swing.JMenuItem jMenuItem8;
     private javax.swing.JMenuItem jMenuItem9;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JScrollPane jScrollPane5;
-    private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTabbedPane jTabbedPane2;
-    private javax.swing.JTable jTable2;
-    private javax.swing.JTable jTable3;
-    private javax.swing.JTextArea jTextArea1;
     private javax.swing.JTree jTree1;
     // End of variables declaration//GEN-END:variables
 }
